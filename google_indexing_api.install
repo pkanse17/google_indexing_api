@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Installation/uninstallation related functions for the google_index_api module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function google_indexing_api_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  if ($phase == 'install') {
+    // If Libraries API is enabled but respond.js is not found within the sites/all/libraries folder
+    // report a warning. The module will fall back to its included copy so this isn't a showstopper.
+    if (function_exists('libraries_get_path') && strpos($library_path,'libraries/google-api-php-client') === FALSE) {
+      $requirements['google_indexing_api']['value'] = t('Google Indexing API required  google-api-php-client Libraries API');
+      $requirements['google_indexing_api']['severity'] = REQUIREMENT_WARNING;
+      $requirements['google_indexing_api']['description'] = t('Please install <a href="https://developers.google.com/api-client-library/php/">Google API Client Libraries PHP</a> in <b>'.libraries_get_path('google-api-php-client') .'</b>. The module is using its included copy at <b>' . drupal_get_path('module','google_indexing_api') . '</b>');
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function google_indexing_api_uninstall() {
+  // TODO : Add variables.
+}
